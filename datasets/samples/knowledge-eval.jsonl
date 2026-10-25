@@ -1,0 +1,4 @@
+{"question":"How often does the fictional ALPHA-7 conveyor require visual inspection?","reference":"every 14 days","source":"maintenance.md"}
+{"question":"What should quality reports record?","reference":"component identifier inspection date defect category inspector identifier image reference","source":"maintenance.md"}
+{"question":"How is the sample reorder policy calculated?","reference":"expected demand during supplier lead time plus safety stock","source":"maintenance.md"}
+{"question":"What torque should be applied to a real vehicle axle?","reference":"insufficient evidence","source":null}

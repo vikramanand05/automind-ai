@@ -1,0 +1,8 @@
+kind: forecast
+dataset: datasets/local/production.csv
+component: CMP-001
+seed: 42
+learning_rate: 0.01
+hidden_size: 16
+epochs: 20
+horizon: 14

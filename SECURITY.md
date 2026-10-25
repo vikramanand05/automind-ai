@@ -1,0 +1,13 @@
+# Security boundaries
+
+This application is intended for a single trusted local operator and synthetic/public portfolio data. Compose binds exposed services to `127.0.0.1`. Do not expose it directly to an enterprise network or the internet.
+
+Implemented controls include environment-based configuration, generated local database/Grafana passwords, ignored secrets and runtime artifacts, restricted CORS origins, validated API schemas, upload size/type limits, safe basenames, PDF encryption/page restrictions, strict UTF-8 parsing, bounded image pixel counts, duplicate/schema validation, route error envelopes, audit records for sensitive operations, JSON-only Celery serialization, trusted configured model allowlists, disabled remote model code and safetensors checkpoint loading. Model output and uploaded text never execute tools, code or shell commands.
+
+Authentication is optional shared `X-API-Key`, disabled by default for loopback development. This is not multiuser RBAC. The users schema is reserved; no password login is exposed and no default user password is shipped. A protected deployment needs an authenticated server-side proxy that injects a key, or a proper OIDC/session authorization layer. Never embed the key in a public frontend bundle. Health and metrics endpoints are intended for local monitoring and have no user authentication.
+
+Expensive POST endpoints have an in-memory per-client sliding window. This is suitable for one local API process, not distributed enforcement; use Redis-backed limits and proxy-level request/body/time quotas before external exposure. In-memory client tracking, ingestion size and history limits do not replace infrastructure quotas. PostgreSQL/Redis/Airflow/MLflow require network controls and backup/retention policies.
+
+Document parsers run without tool access but within the API process. Malformed PDF/image parsing is not a sandbox boundary. Before untrusted external use, isolate parsing in resource-limited worker containers with strict CPU/memory/time limits, malware scanning, encrypted object storage and retention/deletion workflows. Corpus size, explanation artifact retention and long-running job concurrency also need quotas.
+
+Additional enterprise work includes OIDC/RBAC, TLS, secrets manager, password hashing if password authentication is introduced, CSRF/session controls, tenant isolation, signed immutable model artifacts, pinned model revisions, SBOM/container scanning, distributed rate limits, audit export, backup/restore drills, migration review, worker crash reconciliation, provenance approval and human oversight for consequential decisions. Public datasets/models retain their own licensing restrictions. Portfolio metrics cannot certify operational safety.

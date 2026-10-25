@@ -1,0 +1,10 @@
+{
+  "experiment_id": "279098ab-0757-45b7-8a76-5c2097b21ece",
+  "mlflow_run_id": "9c190069b0214564a325bd57dcc38540",
+  "readiness": {
+    "status": "ready",
+    "database": "connected",
+    "redis": "connected"
+  },
+  "benchmark": false
+}

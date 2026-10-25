@@ -1,0 +1,139 @@
+name: automind
+x-api-environment: &api-environment
+  DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-automind}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-automind}
+  REDIS_URL: redis://redis:6379/0
+  STORAGE_DIR: /app/runtime
+  CORS_ORIGINS: '["http://localhost:3000"]'
+  MLFLOW_TRACKING_URI: http://mlflow:5000
+  TRAINING_ENABLED: ${TRAINING_ENABLED:-false}
+  LLM_MODE: ${LLM_MODE:-extractive}
+  LLM_DEVICE: ${LLM_DEVICE:-cpu}
+  LLM_MODEL: ${LLM_MODEL:-HuggingFaceTB/SmolLM2-135M-Instruct}
+  MODEL_ALLOWLIST: '${MODEL_ALLOWLIST:-["HuggingFaceTB/SmolLM2-135M-Instruct","sentence-transformers/all-MiniLM-L6-v2"]}'
+  EMBEDDING_MODE: ${EMBEDDING_MODE:-hashing}
+  API_KEY: ${API_KEY:-}
+  PUBLIC_API_URL: http://localhost:${API_PORT:-8000}
+  DECISION_REVIEWER_ID: ${DECISION_REVIEWER_ID:-local-reviewer}
+  DECISION_REVIEW_TOKEN_SHA256: ${DECISION_REVIEW_TOKEN_SHA256:-}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-automind}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-automind}
+    ports: ["127.0.0.1:${POSTGRES_PORT:-5432}:5432"]
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports: ["127.0.0.1:${REDIS_PORT:-6379}:6379"]
+    volumes: ["redis-data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    image: automind-api:latest
+    environment: *api-environment
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    volumes: ["runtime-data:/app/runtime"]
+
+  api:
+    image: automind-api:latest
+    build: {context: ., dockerfile: infrastructure/docker/api.Dockerfile}
+    environment: *api-environment
+    ports: ["127.0.0.1:${API_PORT:-8000}:8000"]
+    volumes: ["runtime-data:/app/runtime", "./datasets/local:/app/datasets/local:ro"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready')"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build: {context: ., dockerfile: infrastructure/docker/web.Dockerfile}
+    environment:
+      API_INTERNAL_URL: http://api:8000
+    ports: ["127.0.0.1:${WEB_PORT:-3000}:3000"]
+    depends_on:
+      api: {condition: service_healthy}
+
+  decision-worker:
+    image: automind-api:latest
+    environment: *api-environment
+    command: ["celery", "-A", "automind.worker:celery_app", "worker", "--queues=decisions", "--hostname=decision@%h", "--concurrency=1", "--loglevel=info", "--without-gossip", "--without-mingle"]
+    volumes: ["runtime-data:/app/runtime", "./datasets/local:/app/datasets/local:ro"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+
+  worker:
+    profiles: [full]
+    build:
+      context: .
+      dockerfile: infrastructure/docker/api.Dockerfile
+      args: {EXTRAS: "ml,forecast"}
+    environment: *api-environment
+    command: ["celery", "-A", "automind.worker:celery_app", "worker", "--loglevel=info", "--concurrency=1"]
+    volumes: ["runtime-data:/app/runtime", "./datasets/local:/app/datasets/local:ro"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+
+  mlflow:
+    profiles: [full]
+    image: ghcr.io/mlflow/mlflow:v3.1.4
+    command: ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "sqlite:////mlflow/tracking.db", "--artifacts-destination", "/mlflow/artifacts", "--serve-artifacts"]
+    ports: ["127.0.0.1:5000:5000"]
+    volumes: ["mlflow-data:/mlflow"]
+
+  airflow:
+    profiles: [full]
+    image: apache/airflow:2.10.5-python3.12
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AUTOMIND_API_URL: http://api:8000
+    command: standalone
+    ports: ["127.0.0.1:8080:8080"]
+    volumes: ["./pipelines/airflow:/opt/airflow/dags:ro", "airflow-data:/opt/airflow"]
+    depends_on:
+      api: {condition: service_healthy}
+
+  prometheus:
+    profiles: [full]
+    image: prom/prometheus:v3.2.1
+    ports: ["127.0.0.1:9090:9090"]
+    volumes: ["./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro"]
+
+  grafana:
+    profiles: [full]
+    image: grafana/grafana:11.6.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports: ["127.0.0.1:3001:3000"]
+    volumes: ["grafana-data:/var/lib/grafana", "./infrastructure/monitoring/grafana:/etc/grafana/provisioning:ro"]
+
+volumes:
+  postgres-data:
+  redis-data:
+  runtime-data:
+  mlflow-data:
+  airflow-data:
+  grafana-data:

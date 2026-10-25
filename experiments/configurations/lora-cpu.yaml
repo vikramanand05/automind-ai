@@ -1,0 +1,13 @@
+kind: lora
+model: HuggingFaceTB/SmolLM2-135M-Instruct
+dataset: datasets/samples/industrial-sft.jsonl
+seed: 42
+learning_rate: 0.0002
+batch_size: 1
+gradient_accumulation: 4
+epochs: 1
+max_sequence_length: 256
+lora_rank: 8
+lora_alpha: 16
+dropout: 0.05
+quantization: none

@@ -1,0 +1,176 @@
+{
+  "seed": 42,
+  "dataset": {
+    "id": "fabf88ab-a144-4e6b-8b7c-ce92f40478b3",
+    "name": "Synthetic benchmark",
+    "synthetic": true,
+    "rows": 720,
+    "checksum": "134e606fd071d977292f8a4f2c97ac4b2b67b279ccb2ab554dce151350708d97",
+    "quality": {
+      "valid": true,
+      "duplicates_removed": 0,
+      "missing_before": 0,
+      "missing_after": 0,
+      "rows": 720,
+      "components": 3
+    },
+    "components": [
+      "CMP-001",
+      "CMP-002",
+      "CMP-003"
+    ],
+    "created_at": "2026-10-24T18:57:55.677990+00:00",
+    "duplicate": false
+  },
+  "results": [
+    {
+      "model": "seasonal_naive",
+      "component": "CMP-001",
+      "metrics": {
+        "mae": 8.904761904761905,
+        "rmse": 10.995670143504755,
+        "wape": 0.09584828293182983,
+        "bias": -2.3333333333333335
+      },
+      "baseline_metrics": {
+        "mae": 8.904761904761905,
+        "rmse": 10.995670143504755,
+        "wape": 0.09584828293182983,
+        "bias": -2.3333333333333335
+      },
+      "latency_ms": 0.14,
+      "synthetic": true
+    },
+    {
+      "model": "xgboost",
+      "component": "CMP-001",
+      "metrics": {
+        "mae": 7.368263971237909,
+        "rmse": 9.149939542561658,
+        "wape": 0.07930986335007488,
+        "bias": -5.7788816179547995
+      },
+      "baseline_metrics": {
+        "mae": 8.904761904761905,
+        "rmse": 10.995670143504755,
+        "wape": 0.09584828293182983,
+        "bias": -2.3333333333333335
+      },
+      "latency_ms": 264.55,
+      "synthetic": true
+    },
+    {
+      "model": "seasonal_naive",
+      "component": "CMP-002",
+      "metrics": {
+        "mae": 5.571428571428571,
+        "rmse": 6.848705126136028,
+        "wape": 0.04777460187831768,
+        "bias": 0.6190476190476191
+      },
+      "baseline_metrics": {
+        "mae": 5.571428571428571,
+        "rmse": 6.848705126136028,
+        "wape": 0.04777460187831768,
+        "bias": 0.6190476190476191
+      },
+      "latency_ms": 0.06,
+      "synthetic": true
+    },
+    {
+      "model": "xgboost",
+      "component": "CMP-002",
+      "metrics": {
+        "mae": 5.90546380905878,
+        "rmse": 6.925151374657429,
+        "wape": 0.05063893017159427,
+        "bias": -2.314395722888765
+      },
+      "baseline_metrics": {
+        "mae": 5.571428571428571,
+        "rmse": 6.848705126136028,
+        "wape": 0.04777460187831768,
+        "bias": 0.6190476190476191
+      },
+      "latency_ms": 224.69,
+      "synthetic": true
+    },
+    {
+      "model": "seasonal_naive",
+      "component": "CMP-003",
+      "metrics": {
+        "mae": 9.476190476190476,
+        "rmse": 11.553189623484524,
+        "wape": 0.06668900804289545,
+        "bias": -1.0
+      },
+      "baseline_metrics": {
+        "mae": 9.476190476190476,
+        "rmse": 11.553189623484524,
+        "wape": 0.06668900804289545,
+        "bias": -1.0
+      },
+      "latency_ms": 0.08,
+      "synthetic": true
+    },
+    {
+      "model": "xgboost",
+      "component": "CMP-003",
+      "metrics": {
+        "mae": 7.425295875186012,
+        "rmse": 8.74987902134925,
+        "wape": 0.0522557685586147,
+        "bias": -4.708206903366816
+      },
+      "baseline_metrics": {
+        "mae": 9.476190476190476,
+        "rmse": 11.553189623484524,
+        "wape": 0.06668900804289545,
+        "bias": -1.0
+      },
+      "latency_ms": 343.93,
+      "synthetic": true
+    }
+  ],
+  "inventory_simulation": {
+    "component": "CMP-001",
+    "simulation": true,
+    "synthetic": true,
+    "reorder_point": 460.59,
+    "safety_stock": 54.81,
+    "order_quantity": 568,
+    "current_inventory": 60.0,
+    "shortage_risk": "high",
+    "recommendation": "reorder",
+    "baseline": {
+      "stockout_frequency": 0.1111111111111111,
+      "average_inventory": 244.36111111111111,
+      "holding_cost": 120.5068493150685,
+      "stockout_cost": 8840.0,
+      "service_level": 0.9310989867498052,
+      "lost_units": 442.0
+    },
+    "proposed": {
+      "stockout_frequency": 0.06944444444444445,
+      "average_inventory": 276.55555555555554,
+      "holding_cost": 136.3835616438356,
+      "stockout_cost": 8420.0,
+      "service_level": 0.9343725643024162,
+      "lost_units": 421.0
+    },
+    "assumptions": {
+      "service_target": 0.95,
+      "lead_time_days": 5,
+      "supplier_reliability": 0.94,
+      "annual_holding_rate": 0.2,
+      "stockout_penalty_per_unit": 20,
+      "seed": 42,
+      "policy_fit_rows": 168,
+      "holdout_rows": 72,
+      "demand": "historical holdout replay",
+      "unmet_demand": "lost sales",
+      "supplier_delay": "independent lead-time delay when delivery is unreliable",
+      "cost_units": "dataset currency; simulation only, no actual savings claimed"
+    }
+  }
+}

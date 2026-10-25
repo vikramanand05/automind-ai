@@ -1,0 +1,65 @@
+{
+  "dataset_checksum": "7569dc9c415dbc394c5915096c488f39537b715512adc74d63a2988e21778eb5",
+  "results": [
+    {
+      "configuration": "extractive",
+      "status": "evaluated",
+      "metrics": {
+        "latency_ms": 10.058373750098326,
+        "retrieval_recall_at_4": 1.0,
+        "reference_token_recall_proxy": 0.875
+      },
+      "examples": [
+        {
+          "question": "How often does the fictional ALPHA-7 conveyor require visual inspection?",
+          "answer": "Retrieved evidence (verbatim excerpts; no generative model used):\n\n[1] # Synthetic maintenance handbook This is fictional training material for software demonstrations. It is not an approved industrial procedure. ## Inspection scheduling The fictional ALPHA-7 conveyor requires a visual inspection every 14 days. The inspection log records belt alignment, guard condition, and unusual vibration. These intervals are synthetic and must not be applied to real machinery. ## Quality documentation In this fictional facility, quality reports record the component identifier, inspection date, defect category, inspector identifier, and image reference. The sample defect categories are scratches, pitting, and inclusions. ## Inventory planning The sample reorder policy uses expected demand during supplier lead time plus safety stock. Safety stock depends on demand variability, lead time, and a stated service target. Simulation results are estimates under assumptions, not actual cost savings.",
+          "latency_ms": 8.823803000268526,
+          "tokens": null,
+          "retrieval_recall_at_4": 1.0,
+          "reference_token_recall_proxy": 1.0,
+          "manual_correctness": null,
+          "manual_citation_accuracy": null,
+          "manual_groundedness": null,
+          "manual_hallucination": null
+        },
+        {
+          "question": "What should quality reports record?",
+          "answer": "Retrieved evidence (verbatim excerpts; no generative model used):\n\n[1] # Synthetic maintenance handbook This is fictional training material for software demonstrations. It is not an approved industrial procedure. ## Inspection scheduling The fictional ALPHA-7 conveyor requires a visual inspection every 14 days. The inspection log records belt alignment, guard condition, and unusual vibration. These intervals are synthetic and must not be applied to real machinery. ## Quality documentation In this fictional facility, quality reports record the component identifier, inspection date, defect category, inspector identifier, and image reference. The sample defect categories are scratches, pitting, and inclusions. ## Inventory planning The sample reorder policy uses expected demand during supplier lead time plus safety stock. Safety stock depends on demand variability, lead time, and a stated service target. Simulation results are estimates under assumptions, not actual cost savings.",
+          "latency_ms": 8.060875999944983,
+          "tokens": null,
+          "retrieval_recall_at_4": 1.0,
+          "reference_token_recall_proxy": 1.0,
+          "manual_correctness": null,
+          "manual_citation_accuracy": null,
+          "manual_groundedness": null,
+          "manual_hallucination": null
+        },
+        {
+          "question": "How is the sample reorder policy calculated?",
+          "answer": "Retrieved evidence (verbatim excerpts; no generative model used):\n\n[1] # Synthetic maintenance handbook This is fictional training material for software demonstrations. It is not an approved industrial procedure. ## Inspection scheduling The fictional ALPHA-7 conveyor requires a visual inspection every 14 days. The inspection log records belt alignment, guard condition, and unusual vibration. These intervals are synthetic and must not be applied to real machinery. ## Quality documentation In this fictional facility, quality reports record the component identifier, inspection date, defect category, inspector identifier, and image reference. The sample defect categories are scratches, pitting, and inclusions. ## Inventory planning The sample reorder policy uses expected demand during supplier lead time plus safety stock. Safety stock depends on demand variability, lead time, and a stated service target. Simulation results are estimates under assumptions, not actual cost savings.",
+          "latency_ms": 9.873992999928305,
+          "tokens": null,
+          "retrieval_recall_at_4": 1.0,
+          "reference_token_recall_proxy": 1.0,
+          "manual_correctness": null,
+          "manual_citation_accuracy": null,
+          "manual_groundedness": null,
+          "manual_hallucination": null
+        },
+        {
+          "question": "What torque should be applied to a real vehicle axle?",
+          "answer": "Retrieved evidence (verbatim excerpts; no generative model used):\n\n[1] # Synthetic maintenance handbook This is fictional training material for software demonstrations. It is not an approved industrial procedure. ## Inspection scheduling The fictional ALPHA-7 conveyor requires a visual inspection every 14 days. The inspection log records belt alignment, guard condition, and unusual vibration. These intervals are synthetic and must not be applied to real machinery. ## Quality documentation In this fictional facility, quality reports record the component identifier, inspection date, defect category, inspector identifier, and image reference. The sample defect categories are scratches, pitting, and inclusions. ## Inventory planning The sample reorder policy uses expected demand during supplier lead time plus safety stock. Safety stock depends on demand variability, lead time, and a stated service target. Simulation results are estimates under assumptions, not actual cost savings.",
+          "latency_ms": 13.47482300025149,
+          "tokens": null,
+          "retrieval_recall_at_4": null,
+          "reference_token_recall_proxy": 0.5,
+          "manual_correctness": null,
+          "manual_citation_accuracy": null,
+          "manual_groundedness": null,
+          "manual_hallucination": null
+        }
+      ]
+    }
+  ],
+  "rubric": "EVALUATION.md; lexical proxy does not measure factual correctness or hallucination"
+}

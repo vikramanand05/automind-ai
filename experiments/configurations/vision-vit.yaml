@@ -1,0 +1,13 @@
+kind: vision
+architecture: vit_b_16
+dataset: datasets/local/neu
+adapter: neu
+pretrained: true
+freeze_backbone: true
+optimizer: adamw
+device: cpu
+seed: 42
+learning_rate: 0.0001
+batch_size: 2
+epochs: 10
+patience: 3

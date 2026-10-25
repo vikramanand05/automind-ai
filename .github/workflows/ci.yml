@@ -1,0 +1,52 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: automind
+          POSTGRES_PASSWORD: ci-only-ephemeral
+          POSTGRES_DB: automind
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U automind" --health-interval 5s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12", cache: pip}
+      - run: pip install -r requirements/base-linux-py312.lock && pip install -e '.[dev,forecast]'
+      - run: ruff check apps/api tests pipelines scripts
+      - run: mypy
+      - run: alembic upgrade head
+        env:
+          DATABASE_URL: postgresql+psycopg://automind:ci-only-ephemeral@localhost:5432/automind
+      - run: pytest -q
+        env:
+          SERVICE_DATABASE_URL: postgresql+psycopg://automind:ci-only-ephemeral@localhost:5432/automind
+          SERVICE_REDIS_URL: redis://localhost:6379/0
+      - run: pip-audit
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "24", cache: npm, cache-dependency-path: apps/web/package-lock.json}
+      - run: npm ci
+        working-directory: apps/web
+      - run: npm run test:unit && npm run typecheck && npm run lint && npm run build
+        working-directory: apps/web
+      - run: npm audit --audit-level=high
+        working-directory: apps/web
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f infrastructure/docker/api.Dockerfile .
+      - run: docker build -f infrastructure/docker/web.Dockerfile .

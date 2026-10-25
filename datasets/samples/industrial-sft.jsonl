@@ -1,0 +1,20 @@
+{"text":"Question: What is traceability?\nAnswer: Traceability links a component to its documented source, processing steps and inspection records."}
+{"text":"Question: What should an inspection record contain?\nAnswer: A component identifier, inspection date, defect category, inspector identifier and image reference."}
+{"text":"Question: What does safety stock cover?\nAnswer: Safety stock is an inventory buffer for uncertainty in demand and supply lead time."}
+{"text":"Question: How is a reorder point defined?\nAnswer: Expected demand during supplier lead time plus safety stock under explicit assumptions."}
+{"text":"Question: What is a surface scratch?\nAnswer: A surface scratch is a linear disruption of the material surface."}
+{"text":"Question: What is a held-out test set?\nAnswer: Data reserved for final evaluation and excluded from training and model selection."}
+{"text":"Question: What is data leakage?\nAnswer: Leakage occurs when information unavailable at prediction time enters training or evaluation features."}
+{"text":"Question: Can synthetic savings be called actual savings?\nAnswer: No. Simulated costs depend on assumptions and do not establish actual business savings."}
+{"text":"Question: What does a model version identify?\nAnswer: A specific checkpoint and its associated training configuration and dataset provenance."}
+{"text":"Question: When should an assistant abstain?\nAnswer: When retrieved evidence is insufficient to support an answer."}
+{"text":"Question: What is visual quality inspection?\nAnswer: Examining images of manufactured components for supported defect categories."}
+{"text":"Question: What is a seasonal naive forecast?\nAnswer: A forecast that repeats the last observed value from the corresponding season."}
+{"text":"Question: Why use chronological splits?\nAnswer: To evaluate forecasting on future observations using only earlier data for model fitting."}
+{"text":"Question: What does MAE measure?\nAnswer: Mean absolute error is the mean absolute difference between predictions and observations."}
+{"text":"Question: What does model confidence mean?\nAnswer: A model score that may require calibration before interpretation as a probability of correctness."}
+{"text":"Question: What is an artifact?\nAnswer: A saved output such as a checkpoint, evaluation report, configuration or explanation image."}
+{"text":"Question: What is macro F1?\nAnswer: The unweighted average of the F1 score across classes."}
+{"text":"Question: What is a supplier lead time?\nAnswer: The time between placing an order and receiving its delivery."}
+{"text":"Question: What is idempotent ingestion?\nAnswer: Repeating ingestion of the same canonical dataset does not duplicate persisted records."}
+{"text":"Question: What does Grad-CAM show?\nAnswer: A class-specific attribution map derived from gradients and convolutional feature activations."}

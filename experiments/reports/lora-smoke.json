@@ -1,0 +1,11 @@
+{
+  "fixture": "random tiny Llama, synthetic token IDs; no pretrained weights or industrial quality claim",
+  "steps": 3,
+  "losses": [
+    4.1606879234313965,
+    4.15242862701416,
+    4.142688274383545
+  ],
+  "adapter": "runtime/smoke-lora",
+  "device": "cpu"
+}
